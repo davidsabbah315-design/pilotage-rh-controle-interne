@@ -1,4 +1,8 @@
-const risks=[
+let parameters={
+  DateSituation:'30/09/2026',ControlesRealises:42,ControlesPrevus:48,EcartsOuverts:9,EcartsMajeurs:3,TauxCorrection:78,
+  'Avancement:Recrutement':92,'Avancement:Gestion collective':88,'Avancement:Rémunération':81,'Avancement:Qualité des données':86,'Avancement:Habilitations':75
+};
+let risks=[
  {id:'R01',title:'Droits SIRH non retirés après mobilité',domain:'Habilitations',level:'Critique',prob:4,impact:4,mastery:45,owner:'Référent SIRH'},
  {id:'R02',title:'Données administratives incomplètes',domain:'Qualité des données',level:'Élevé',prob:4,impact:3,mastery:61,owner:'Gestion collective'},
  {id:'R03',title:'Écart entre poste et régime indemnitaire',domain:'Rémunération',level:'Élevé',prob:3,impact:4,mastery:57,owner:'Section indemnitaire'},
@@ -12,7 +16,7 @@ const risks=[
  {id:'R11',title:'Erreur de libellé dans un tableau de bord',domain:'Pilotage',level:'Faible',prob:1,impact:2,mastery:88,owner:'Cellule pilotage'},
  {id:'R12',title:'Archivage tardif d’un dossier clos',domain:'Archivage',level:'Faible',prob:1,impact:1,mastery:90,owner:'Gestion collective'}
 ];
-const controls=[
+let controls=[
  {ref:'CI-26-041',name:'Revue trimestrielle des habilitations SIRH',domain:'Habilitations',owner:'L. Martin',date:'04/10/2026',status:'Écart majeur'},
  {ref:'CI-26-042',name:'Rapprochement postes / régime indemnitaire',domain:'Rémunération',owner:'S. Bernard',date:'07/10/2026',status:'Écart majeur'},
  {ref:'CI-26-043',name:'Complétude des dossiers de recrutement',domain:'Recrutement',owner:'N. Petit',date:'15/09/2026',status:'Écart mineur'},
@@ -23,16 +27,16 @@ const controls=[
  {ref:'CI-26-048',name:'Vérification des départs et comptes actifs',domain:'Habilitations',owner:'L. Martin',date:'18/10/2026',status:'À réaliser'},
  {ref:'CI-26-049',name:'Contrôle de cohérence des affectations',domain:'Qualité des données',owner:'N. Petit',date:'26/09/2026',status:'Conforme'}
 ];
-const actions=[
- {id:'ACT-031',title:'Clôturer 7 comptes après mobilité',desc:'Droits encore actifs sur un ancien périmètre de gestion.',owner:'L. Martin',due:'04 oct.',status:'À engager',priority:true,level:'Critique'},
- {id:'ACT-032',title:'Corriger 12 dossiers administratifs',desc:'Champs statutaires ou affectation incomplets.',owner:'N. Petit',due:'07 oct.',status:'En cours',priority:true,level:'Élevé'},
- {id:'ACT-033',title:'Rapprocher 4 positions indemnitaires',desc:'Écart entre poste occupé et paramétrage IFSE.',owner:'S. Bernard',due:'10 oct.',status:'En cours',priority:true,level:'Élevé'},
- {id:'ACT-034',title:'Formaliser la validation des extractions',desc:'Ajouter une trace de revue avant diffusion mensuelle.',owner:'D. Morel',due:'18 oct.',status:'À engager',priority:false,level:'Modéré'},
- {id:'ACT-035',title:'Fusionner deux dossiers en doublon',desc:'Même agent enregistré sous deux identifiants techniques.',owner:'L. Martin',due:'25 sept.',status:'Clôturé',priority:false,level:'Modéré'},
- {id:'ACT-036',title:'Uniformiser la liste des pièces attendues',desc:'Référentiel partagé pour les quatre sections métier.',owner:'A. Robert',due:'28 sept.',status:'Clôturé',priority:false,level:'Modéré'},
- {id:'ACT-037',title:'Sécuriser les alertes de fin de contrat',desc:'Contrôle à J-90 et J-30 avec responsable identifié.',owner:'N. Petit',due:'22 oct.',status:'À engager',priority:false,level:'Modéré'}
+let actions=[
+ {id:'ACT-031',title:'Clôturer 7 comptes après mobilité',desc:'Droits encore actifs sur un ancien périmètre de gestion.',owner:'L. Martin',due:'04/10/2026',status:'À engager',priority:true,level:'Critique'},
+ {id:'ACT-032',title:'Corriger 12 dossiers administratifs',desc:'Champs statutaires ou affectation incomplets.',owner:'N. Petit',due:'07/10/2026',status:'En cours',priority:true,level:'Élevé'},
+ {id:'ACT-033',title:'Rapprocher 4 positions indemnitaires',desc:'Écart entre poste occupé et paramétrage IFSE.',owner:'S. Bernard',due:'10/10/2026',status:'En cours',priority:true,level:'Élevé'},
+ {id:'ACT-034',title:'Formaliser la validation des extractions',desc:'Ajouter une trace de revue avant diffusion mensuelle.',owner:'D. Morel',due:'18/10/2026',status:'À engager',priority:false,level:'Modéré'},
+ {id:'ACT-035',title:'Fusionner deux dossiers en doublon',desc:'Même agent enregistré sous deux identifiants techniques.',owner:'L. Martin',due:'25/09/2026',status:'Clôturé',priority:false,level:'Modéré'},
+ {id:'ACT-036',title:'Uniformiser la liste des pièces attendues',desc:'Référentiel partagé pour les quatre sections métier.',owner:'A. Robert',due:'28/09/2026',status:'Clôturé',priority:false,level:'Modéré'},
+ {id:'ACT-037',title:'Sécuriser les alertes de fin de contrat',desc:'Contrôle à J-90 et J-30 avec responsable identifié.',owner:'N. Petit',due:'22/10/2026',status:'À engager',priority:false,level:'Modéré'}
 ];
-const barData=[['Recrutement',92],['Gestion collective',88],['Rémunération',81],['Qualité des données',86],['Habilitations',75]];
+const defaultData=JSON.parse(JSON.stringify({parameters,risks,controls,actions}));
 const processDetails=[
  ['Détecter et enregistrer','Le contrôleur consigne le fait générateur, la population concernée, la règle attendue et la preuve initiale. Un identifiant unique garantit la traçabilité.'],
  ['Qualifier l’écart','La cause, l’impact et la probabilité sont analysés. La criticité détermine le délai de traitement et le niveau d’escalade.'],
@@ -40,36 +44,62 @@ const processDetails=[
  ['Mettre en œuvre','Le pilote réalise la correction et joint les éléments probants. Tout retard est motivé et, si nécessaire, rééchelonné.'],
  ['Vérifier et clôturer','Le contrôle d’efficacité confirme que la cause est traitée. La clôture est validée par la cellule pilotage et intégrée au reporting.']
 ];
-
 const titleMap={dashboard:'Tableau de bord',risks:'Cartographie des risques',controls:'Contrôles & écarts',actions:'Anomalies & actions',process:'Processus'};
+
 function showView(id){document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.dataset.view===id));document.getElementById('pageTitle').textContent=titleMap[id];document.querySelector('.sidebar').classList.remove('open');document.getElementById('menuButton').setAttribute('aria-expanded','false');window.scrollTo({top:0,behavior:'smooth'});}
 document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
 document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.go)));
 document.getElementById('menuButton').addEventListener('click',e=>{const s=document.querySelector('.sidebar');s.classList.toggle('open');e.currentTarget.setAttribute('aria-expanded',s.classList.contains('open'));});
 
-document.getElementById('barChart').innerHTML=barData.map(([n,v])=>`<div class="bar-row"><span>${n}</span><div class="bar-track"><div class="bar-fill" style="width:${v}%"></div></div><strong>${v} %</strong></div>`).join('');
-const alertItems=actions.filter(a=>a.priority);
-document.getElementById('dashboardAlerts').innerHTML=alertItems.map(a=>`<article class="alert-card ${a.level==='Critique'?'critical':''}"><div class="meta"><span>${a.id}</span><span>Échéance ${a.due}</span></div><h4>${a.title}</h4><p>${a.owner} · ${a.level}</p></article>`).join('');
-
-function renderMatrix(){const cells=[];for(let p=4;p>=1;p--){for(let i=1;i<=4;i++){const score=p*i,cls=score>=12?'c3':score>=6?'c2':'c1';const tokens=risks.filter(r=>r.prob===p&&r.impact===i).map(r=>`<span class="risk-token" title="${r.id} — ${r.title}">${r.id.slice(1)}</span>`).join('');cells.push(`<div class="matrix-cell ${cls}">${tokens}</div>`);}}document.getElementById('riskMatrix').innerHTML=`<div class="matrix-label-y">PROBABILITÉ</div>${cells.join('')}<div class="matrix-axis">IMPACT</div>`;}
+function num(value,fallback=0){const n=Number(String(value).replace(',','.'));return Number.isFinite(n)?n:fallback;}
+function formatDateLong(value){const m=String(value||'').match(/^(\d{1,2})[\/-](\d{1,2})[\/-](\d{4})$/);if(!m)return String(value||'');const d=new Date(Number(m[3]),Number(m[2])-1,Number(m[1]));return new Intl.DateTimeFormat('fr-FR',{day:'numeric',month:'long',year:'numeric'}).format(d);}
+function shortDate(value){const m=String(value||'').match(/^(\d{1,2})[\/-](\d{1,2})/);if(!m)return String(value||'');const months=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];return `${Number(m[1])} ${months[Number(m[2])-1]}`;}
+function getProgressData(){const entries=Object.entries(parameters).filter(([k])=>k.startsWith('Avancement:')).map(([k,v])=>[k.slice(11),num(v)]);if(entries.length)return entries;const domains=[...new Set(controls.map(c=>c.domain))];return domains.map(d=>{const group=controls.filter(c=>c.domain===d);return[d,Math.round(group.filter(c=>c.status!=='À réaliser').length/Math.max(group.length,1)*100)];});}
+function renderDashboard(){
+  const done=num(parameters.ControlesRealises,controls.filter(c=>c.status!=='À réaliser').length),total=num(parameters.ControlesPrevus,controls.length);
+  const gaps=num(parameters.EcartsOuverts,controls.filter(c=>c.status.includes('Écart')).length),major=num(parameters.EcartsMajeurs,controls.filter(c=>c.status==='Écart majeur').length);
+  const correction=num(parameters.TauxCorrection,Math.round(actions.filter(a=>a.status==='Clôturé').length/Math.max(actions.length,1)*100));
+  const high=risks.filter(r=>r.level==='Critique'||r.level==='Élevé').length;
+  document.getElementById('reportingPeriod').textContent=`Situation au ${formatDateLong(parameters.DateSituation)}`;
+  const planRate=total?String(Math.round(done/total*1000)/10).replace('.',','):0;
+  document.getElementById('kpiControlsDone').textContent=done;document.getElementById('kpiControlsTotal').textContent=total;document.getElementById('kpiControlsNote').textContent=`${planRate} % du plan`;document.getElementById('globalProgress').textContent=`${planRate} % global`;
+  document.getElementById('kpiGaps').textContent=gaps;document.getElementById('kpiGapsNote').textContent=`dont ${major} majeur${major>1?'s':''}`;
+  document.getElementById('kpiCorrection').textContent=correction;document.getElementById('kpiHighRisks').textContent=high;document.getElementById('kpiRisksNote').textContent=`sur ${risks.length} risques suivis`;document.getElementById('riskDistributionNote').textContent=`Répartition des ${risks.length} risques suivis`;
+  document.getElementById('barChart').innerHTML=getProgressData().map(([n,v])=>`<div class="bar-row"><span>${n}</span><div class="bar-track"><div class="bar-fill" style="width:${Math.min(100,Math.max(0,v))}%"></div></div><strong>${v} %</strong></div>`).join('');
+  const counts={Critique:0,'Élevé':0,'Modéré':0,Faible:0};risks.forEach(r=>counts[r.level]=(counts[r.level]||0)+1);const totalRisks=Math.max(risks.length,1);let cursor=0;const colors=['var(--red)','var(--amber)','var(--blue)','#8aa0b5'];const levels=['Critique','Élevé','Modéré','Faible'];const stops=levels.map((l,i)=>{const start=cursor;cursor+=counts[l]/totalRisks*100;return `${colors[i]} ${start}% ${cursor}%`;});document.getElementById('riskDonut').style.background=`conic-gradient(${stops.join(',')})`;
+  document.getElementById('riskTotal').textContent=risks.length;document.getElementById('riskCritical').textContent=counts.Critique;document.getElementById('riskHigh').textContent=counts['Élevé'];document.getElementById('riskMedium').textContent=counts['Modéré'];document.getElementById('riskLow').textContent=counts.Faible;
+  const alertItems=actions.filter(a=>a.priority).slice(0,3);document.getElementById('dashboardAlerts').innerHTML=alertItems.map(a=>`<article class="alert-card ${a.level==='Critique'?'critical':''}"><div class="meta"><span>${a.id}</span><span>Échéance ${shortDate(a.due)}</span></div><h4>${a.title}</h4><p>${a.owner} · ${a.level}</p></article>`).join('')||'<p>Aucune action prioritaire.</p>';
+}
+function renderMatrix(){const cells=[];for(let p=4;p>=1;p--){for(let i=1;i<=4;i++){const score=p*i,cls=score>=12?'c3':score>=6?'c2':'c1';const tokens=risks.filter(r=>r.prob===p&&r.impact===i).map(r=>`<span class="risk-token" title="${r.id} — ${r.title}">${r.id.replace(/\D/g,'')||r.id}</span>`).join('');cells.push(`<div class="matrix-cell ${cls}">${tokens}</div>`);}}document.getElementById('riskMatrix').innerHTML=`<div class="matrix-label-y">PROBABILITÉ</div>${cells.join('')}<div class="matrix-axis">IMPACT</div>`;}
 function renderRisks(){const f=document.getElementById('riskFilter').value;const items=risks.filter(r=>f==='all'||r.level===f);document.getElementById('riskCount').textContent=`${items.length} risque${items.length>1?'s':''} affiché${items.length>1?'s':''}`;document.getElementById('riskList').innerHTML=items.map(r=>`<article class="risk-card"><div><h4>${r.id} · ${r.title}</h4><p>${r.domain} · Pilote : ${r.owner}</p></div><span class="pill ${r.level==='Élevé'?'high':r.level==='Modéré'?'medium':r.level==='Faible'?'low':'critical'}">${r.level}</span><div class="mastery">Niveau de maîtrise : ${r.mastery} %<div class="mastery-bar"><i style="width:${r.mastery}%"></i></div></div></article>`).join('');}
 document.getElementById('riskFilter').addEventListener('change',renderRisks);
-
-function statusClass(s){return s==='Conforme'?'ok':s==='Écart mineur'?'minor':s==='Écart majeur'?'major':'todo'}
+function statusClass(s){return s==='Conforme'?'ok':s==='Écart mineur'?'minor':s==='Écart majeur'?'major':'todo';}
 function renderControls(){const q=document.getElementById('controlSearch').value.toLowerCase(),f=document.getElementById('controlStatus').value;const items=controls.filter(c=>(f==='all'||c.status===f)&&Object.values(c).join(' ').toLowerCase().includes(q));document.getElementById('controlRows').innerHTML=items.map(c=>`<tr><td>${c.ref}</td><td>${c.name}</td><td>${c.domain}</td><td>${c.owner}</td><td>${c.date}</td><td><span class="result ${statusClass(c.status)}">${c.status}</span></td></tr>`).join('');document.getElementById('controlEmpty').style.display=items.length?'none':'block';}
 document.getElementById('controlSearch').addEventListener('input',renderControls);document.getElementById('controlStatus').addEventListener('change',renderControls);
-
 let priorityOnly=false;
-function renderActions(){const items=priorityOnly?actions.filter(a=>a.priority):actions;const statuses=['À engager','En cours','Clôturé'];document.getElementById('actionSummary').innerHTML=statuses.map(s=>`<span class="status-chip"><strong>${items.filter(a=>a.status===s).length}</strong>${s}</span>`).join('');document.getElementById('actionBoard').innerHTML=statuses.map(s=>{const col=items.filter(a=>a.status===s);return `<section class="kanban-col"><div class="kanban-head"><h3>${s}</h3><span>${col.length}</span></div>${col.map(a=>`<article class="action-card ${a.priority?'priority':''}"><span class="pill ${a.level==='Critique'?'critical':a.level==='Élevé'?'high':'medium'}">${a.level}</span><h4>${a.title}</h4><p>${a.desc}</p><div class="action-meta"><span>${a.owner}</span><strong>${a.due}</strong></div></article>`).join('')||'<p class="empty-col">Aucune action</p>'}</section>`}).join('');document.getElementById('priorityToggle').textContent=priorityOnly?'Afficher toutes les actions':'Afficher uniquement les priorités';}
-document.getElementById('priorityToggle').addEventListener('click',()=>{priorityOnly=!priorityOnly;renderActions();});
-document.getElementById('focusPriority').addEventListener('click',()=>{priorityOnly=true;renderActions();showView('actions');});
-
+function renderActions(){const items=priorityOnly?actions.filter(a=>a.priority):actions;const statuses=['À engager','En cours','Clôturé'];document.getElementById('actionSummary').innerHTML=statuses.map(s=>`<span class="status-chip"><strong>${items.filter(a=>a.status===s).length}</strong>${s}</span>`).join('');document.getElementById('actionBoard').innerHTML=statuses.map(s=>{const col=items.filter(a=>a.status===s);return `<section class="kanban-col"><div class="kanban-head"><h3>${s}</h3><span>${col.length}</span></div>${col.map(a=>`<article class="action-card ${a.priority?'priority':''}"><span class="pill ${a.level==='Critique'?'critical':a.level==='Élevé'?'high':a.level==='Faible'?'low':'medium'}">${a.level}</span><h4>${a.title}</h4><p>${a.desc}</p><div class="action-meta"><span>${a.owner}</span><strong>${shortDate(a.due)}</strong></div></article>`).join('')||'<p class="empty-col">Aucune action</p>'}</section>`}).join('');document.getElementById('priorityToggle').textContent=priorityOnly?'Afficher toutes les actions':'Afficher uniquement les priorités';}
+document.getElementById('priorityToggle').addEventListener('click',()=>{priorityOnly=!priorityOnly;renderActions();});document.getElementById('focusPriority').addEventListener('click',()=>{priorityOnly=true;renderActions();showView('actions');});
 function setProcess(i){document.querySelectorAll('.process-step').forEach((b,j)=>b.classList.toggle('active',i===j));const d=processDetails[i];document.getElementById('processDetail').innerHTML=`<h3>${i+1}. ${d[0]}</h3><p>${d[1]}</p>`;}
 document.querySelectorAll('.process-step').forEach((b,i)=>b.addEventListener('click',()=>setProcess(i)));
+function renderAll(){renderDashboard();renderMatrix();renderRisks();renderControls();renderActions();}
 
-function csvEscape(v){return `"${String(v).replaceAll('"','""')}"`}
+function rowsFromSheet(workbook,name,requiredHeaders){const ws=workbook.Sheets[name];if(!ws)throw new Error(`Onglet manquant : ${name}`);const grid=XLSX.utils.sheet_to_json(ws,{header:1,raw:false,defval:''});const headerIndex=grid.findIndex(row=>requiredHeaders.every(h=>row.map(String).includes(h)));if(headerIndex<0)throw new Error(`En-têtes non conformes dans l’onglet ${name}`);const rows=XLSX.utils.sheet_to_json(ws,{range:headerIndex,raw:false,defval:''});return rows.filter(row=>Object.values(row).some(v=>String(v).trim()!==''));}
+function ensureUnique(items,key,label){const ids=items.map(x=>x[key]);if(new Set(ids).size!==ids.length)throw new Error(`${label} : les identifiants doivent être uniques.`);}
+function validateAllowed(value,allowed,label){if(!allowed.includes(value))throw new Error(`${label} : valeur « ${value} » non autorisée.`);return value;}
+function parseWorkbook(buffer){if(typeof XLSX==='undefined')throw new Error('Le module de lecture Excel n’a pas pu être chargé. Vérifiez votre connexion puis réessayez.');const wb=XLSX.read(buffer,{type:'array'});const paramRows=rowsFromSheet(wb,'Parametres',['Champ','Valeur']);const nextParameters={};paramRows.forEach(r=>{const key=String(r.Champ).trim();if(key)nextParameters[key]=r.Valeur;});
+  const riskRows=rowsFromSheet(wb,'Risques',['ID','Risque','Domaine','Niveau','Probabilite','Impact','Maitrise','Pilote']);const nextRisks=riskRows.map((r,i)=>({id:String(r.ID).trim(),title:String(r.Risque).trim(),domain:String(r.Domaine).trim(),level:validateAllowed(String(r.Niveau).trim(),['Critique','Élevé','Modéré','Faible'],`Risques ligne ${i+5}`),prob:num(r.Probabilite,-1),impact:num(r.Impact,-1),mastery:num(r.Maitrise,-1),owner:String(r.Pilote).trim()}));
+  if(nextRisks.some(r=>!r.id||!r.title||!r.domain||!r.owner||r.prob<1||r.prob>4||r.impact<1||r.impact>4||r.mastery<0||r.mastery>100))throw new Error('Risques : vérifiez les champs obligatoires et les bornes numériques.');ensureUnique(nextRisks,'id','Risques');
+  const controlRows=rowsFromSheet(wb,'Controles',['Reference','Controle','Domaine','Pilote','Echeance','Resultat']);const nextControls=controlRows.map((r,i)=>({ref:String(r.Reference).trim(),name:String(r.Controle).trim(),domain:String(r.Domaine).trim(),owner:String(r.Pilote).trim(),date:String(r.Echeance).trim(),status:validateAllowed(String(r.Resultat).trim(),['Conforme','Écart mineur','Écart majeur','À réaliser'],`Controles ligne ${i+5}`)}));if(nextControls.some(c=>!c.ref||!c.name||!c.domain||!c.owner||!c.date))throw new Error('Controles : tous les champs sont obligatoires.');ensureUnique(nextControls,'ref','Controles');
+  const actionRows=rowsFromSheet(wb,'Actions',['ID','Action','Description','Pilote','Echeance','Statut','Prioritaire','Niveau']);const nextActions=actionRows.map((r,i)=>({id:String(r.ID).trim(),title:String(r.Action).trim(),desc:String(r.Description).trim(),owner:String(r.Pilote).trim(),due:String(r.Echeance).trim(),status:validateAllowed(String(r.Statut).trim(),['À engager','En cours','Clôturé'],`Actions ligne ${i+5}`),priority:validateAllowed(String(r.Prioritaire).trim(),['Oui','Non'],`Actions ligne ${i+5}`)==='Oui',level:validateAllowed(String(r.Niveau).trim(),['Critique','Élevé','Modéré','Faible'],`Actions ligne ${i+5}`)}));if(nextActions.some(a=>!a.id||!a.title||!a.desc||!a.owner||!a.due))throw new Error('Actions : tous les champs sont obligatoires.');ensureUnique(nextActions,'id','Actions');
+  return{parameters:nextParameters,risks:nextRisks,controls:nextControls,actions:nextActions};}
+function applyData(data,sourceName){parameters=data.parameters;risks=data.risks;controls=data.controls;actions=data.actions;priorityOnly=false;document.getElementById('riskFilter').value='all';document.getElementById('controlStatus').value='all';document.getElementById('controlSearch').value='';renderAll();document.getElementById('dataSource').textContent=`Source active : ${sourceName}`;document.getElementById('resetData').hidden=sourceName==='base fictive d’origine';}
+function setFeedback(message,type){const el=document.getElementById('importFeedback');el.textContent=message;el.className=`import-feedback ${type}`;}
+document.getElementById('excelImport').addEventListener('change',async e=>{const file=e.target.files[0];if(!file)return;try{const data=parseWorkbook(await file.arrayBuffer());applyData(data,file.name);setFeedback(`Import réussi : ${data.risks.length} risques, ${data.controls.length} contrôles et ${data.actions.length} actions ont mis à jour le tableau.`, 'success');showToast('La base Excel a été appliquée.');}catch(err){setFeedback(`Import refusé : ${err.message}`,'error');}finally{e.target.value='';}});
+document.getElementById('resetData').addEventListener('click',()=>{applyData(JSON.parse(JSON.stringify(defaultData)),'base fictive d’origine');setFeedback('Les données fictives d’origine ont été restaurées.','success');});
+
+function csvEscape(v){return `"${String(v).replaceAll('"','""')}"`;}
 function exportCsv(type){let rows,name;if(type==='risks'){rows=[['Référence','Risque','Domaine','Niveau','Probabilité','Impact','Maîtrise','Pilote'],...risks.map(r=>[r.id,r.title,r.domain,r.level,r.prob,r.impact,r.mastery+' %',r.owner])];name='cartographie-risques-fictive.csv';}else{rows=[['Référence','Contrôle','Domaine','Pilote','Échéance','Résultat'],...controls.map(c=>[c.ref,c.name,c.domain,c.owner,c.date,c.status])];name='registre-controles-fictif.csv';}const blob=new Blob(['\ufeff'+rows.map(r=>r.map(csvEscape).join(';')).join('\n')],{type:'text/csv;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;a.click();URL.revokeObjectURL(a.href);showToast('Export CSV généré — données fictives.');}
 document.querySelectorAll('.export').forEach(b=>b.addEventListener('click',()=>exportCsv(b.dataset.export)));
 let toastTimer;function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),2600);}
-
-renderMatrix();renderRisks();renderControls();renderActions();setProcess(0);
+window.__pilotageTest={parseWorkbook,applyData,getSnapshot:()=>JSON.parse(JSON.stringify({parameters,risks,controls,actions}))};
+renderAll();setProcess(0);

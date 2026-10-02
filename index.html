@@ -32,27 +32,40 @@
       <header class="topbar">
         <button class="menu-button" id="menuButton" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
         <div><p class="eyebrow">CELLULE PILOTAGE RH & CONTRÔLE INTERNE</p><h1 id="pageTitle">Tableau de bord</h1></div>
-        <div class="topbar-meta"><span class="period">Situation au 30 septembre 2026</span><span class="avatar">DS</span></div>
+        <div class="topbar-meta"><span class="period" id="reportingPeriod">Situation au 30 septembre 2026</span><span class="avatar">DS</span></div>
       </header>
 
       <div class="fictitious-banner"><strong>DÉMONSTRATEUR</strong><span>Réalisé à partir de données entièrement fictives — aucune donnée du ministère</span></div>
 
       <section class="view active" id="dashboard" aria-labelledby="pageTitle">
         <div class="section-intro"><div><h2>Situation du dispositif</h2><p>Vue consolidée des contrôles, risques et actions correctrices.</p></div><button class="button secondary" id="focusPriority">Voir les actions prioritaires</button></div>
+        <article class="panel data-panel">
+          <div class="data-panel-copy">
+            <span class="data-icon" aria-hidden="true">XLS</span>
+            <div><h3>Base de données du démonstrateur</h3><p>Téléchargez la base fictive, modifiez les lignes dans Excel puis réimportez-la. Le fichier reste dans votre navigateur.</p><span class="data-source" id="dataSource">Source active : base fictive d’origine</span></div>
+          </div>
+          <div class="data-actions">
+            <a class="button secondary" href="base-demonstration-controle-interne-rh.xlsx" download>Télécharger la base Excel</a>
+            <label class="button primary" for="excelImport">Importer une base Excel</label>
+            <input type="file" id="excelImport" accept=".xlsx,.xls" hidden>
+            <button class="button ghost" id="resetData" hidden>Réinitialiser</button>
+          </div>
+          <div class="import-feedback" id="importFeedback" role="status" aria-live="polite"></div>
+        </article>
         <div class="kpi-grid">
-          <article class="kpi"><div class="kpi-icon navy">✓</div><div><span>Contrôles réalisés</span><strong>42 <small>/ 48</small></strong><p class="positive">+6 ce trimestre</p></div></article>
-          <article class="kpi"><div class="kpi-icon amber">!</div><div><span>Écarts ouverts</span><strong>9</strong><p>dont 3 majeurs</p></div></article>
-          <article class="kpi"><div class="kpi-icon teal">↗</div><div><span>Taux de correction</span><strong>78 %</strong><p class="positive">+11 points</p></div></article>
-          <article class="kpi"><div class="kpi-icon red">◆</div><div><span>Risques élevés</span><strong>4</strong><p>sur 12 risques suivis</p></div></article>
+          <article class="kpi"><div class="kpi-icon navy">✓</div><div><span>Contrôles réalisés</span><strong><b id="kpiControlsDone">42</b> <small>/ <b id="kpiControlsTotal">48</b></small></strong><p id="kpiControlsNote">87,5 % du plan</p></div></article>
+          <article class="kpi"><div class="kpi-icon amber">!</div><div><span>Écarts ouverts</span><strong id="kpiGaps">9</strong><p id="kpiGapsNote">dont 3 majeurs</p></div></article>
+          <article class="kpi"><div class="kpi-icon teal">↗</div><div><span>Taux de correction</span><strong><b id="kpiCorrection">78</b> %</strong><p>actions clôturées</p></div></article>
+          <article class="kpi"><div class="kpi-icon red">◆</div><div><span>Risques élevés</span><strong id="kpiHighRisks">4</strong><p id="kpiRisksNote">sur 12 risques suivis</p></div></article>
         </div>
         <div class="dashboard-grid">
           <article class="panel chart-panel">
-            <div class="panel-head"><div><h3>Avancement du plan de contrôle</h3><p>Contrôles réalisés par domaine</p></div><span class="pill neutral">87,5 % global</span></div>
+            <div class="panel-head"><div><h3>Avancement du plan de contrôle</h3><p>Contrôles réalisés par domaine</p></div><span class="pill neutral" id="globalProgress">87,5 % global</span></div>
             <div class="bar-chart" id="barChart"></div>
           </article>
           <article class="panel risk-summary">
-            <div class="panel-head"><div><h3>Exposition aux risques</h3><p>Répartition des 12 risques suivis</p></div></div>
-            <div class="donut-wrap"><div class="donut"><div><strong>12</strong><span>risques</span></div></div><ul class="legend"><li><i class="dot critical"></i><span>Critique</span><strong>1</strong></li><li><i class="dot high"></i><span>Élevé</span><strong>3</strong></li><li><i class="dot medium"></i><span>Modéré</span><strong>5</strong></li><li><i class="dot low"></i><span>Faible</span><strong>3</strong></li></ul></div>
+            <div class="panel-head"><div><h3>Exposition aux risques</h3><p id="riskDistributionNote">Répartition des 12 risques suivis</p></div></div>
+            <div class="donut-wrap"><div class="donut" id="riskDonut"><div><strong id="riskTotal">12</strong><span>risques</span></div></div><ul class="legend"><li><i class="dot critical"></i><span>Critique</span><strong id="riskCritical">1</strong></li><li><i class="dot high"></i><span>Élevé</span><strong id="riskHigh">3</strong></li><li><i class="dot medium"></i><span>Modéré</span><strong id="riskMedium">5</strong></li><li><i class="dot low"></i><span>Faible</span><strong id="riskLow">3</strong></li></ul></div>
           </article>
           <article class="panel span-2">
             <div class="panel-head"><div><h3>Alertes à traiter</h3><p>Échéances et écarts nécessitant une attention immédiate</p></div><button class="text-button" data-go="actions">Ouvrir le suivi</button></div>
@@ -98,6 +111,7 @@
     </main>
   </div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="app.js"></script>
 </body>
 </html>
