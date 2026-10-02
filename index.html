@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Démonstrateur fictif de pilotage RH et de contrôle interne.">
+  <title>Pilotage RH — Démonstrateur de contrôle interne</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230b2341'/%3E%3Cpath d='M16 5l9 4v7c0 6-4 10-9 12-5-2-9-6-9-12V9l9-4z' fill='%23fff'/%3E%3Cpath d='M11 16l3 3 7-7' fill='none' stroke='%2328a69a' stroke-width='2.4'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Navigation principale">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">CI</div>
+        <div><strong>Pilotage RH</strong><span>Contrôle interne</span></div>
+      </div>
+      <nav class="nav-list">
+        <button class="nav-item active" data-view="dashboard"><span>01</span>Tableau de bord</button>
+        <button class="nav-item" data-view="risks"><span>02</span>Cartographie des risques</button>
+        <button class="nav-item" data-view="controls"><span>03</span>Contrôles & écarts</button>
+        <button class="nav-item" data-view="actions"><span>04</span>Anomalies & actions</button>
+        <button class="nav-item" data-view="process"><span>05</span>Processus</button>
+      </nav>
+      <div class="sidebar-note">
+        <span class="note-icon">i</span>
+        <p><strong>Données fictives</strong>Aucune donnée du ministère n’est utilisée.</p>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <button class="menu-button" id="menuButton" aria-label="Ouvrir le menu" aria-expanded="false">☰</button>
+        <div><p class="eyebrow">CELLULE PILOTAGE RH & CONTRÔLE INTERNE</p><h1 id="pageTitle">Tableau de bord</h1></div>
+        <div class="topbar-meta"><span class="period">Situation au 30 septembre 2026</span><span class="avatar">DS</span></div>
+      </header>
+
+      <div class="fictitious-banner"><strong>DÉMONSTRATEUR</strong><span>Réalisé à partir de données entièrement fictives — aucune donnée du ministère</span></div>
+
+      <section class="view active" id="dashboard" aria-labelledby="pageTitle">
+        <div class="section-intro"><div><h2>Situation du dispositif</h2><p>Vue consolidée des contrôles, risques et actions correctrices.</p></div><button class="button secondary" id="focusPriority">Voir les actions prioritaires</button></div>
+        <div class="kpi-grid">
+          <article class="kpi"><div class="kpi-icon navy">✓</div><div><span>Contrôles réalisés</span><strong>42 <small>/ 48</small></strong><p class="positive">+6 ce trimestre</p></div></article>
+          <article class="kpi"><div class="kpi-icon amber">!</div><div><span>Écarts ouverts</span><strong>9</strong><p>dont 3 majeurs</p></div></article>
+          <article class="kpi"><div class="kpi-icon teal">↗</div><div><span>Taux de correction</span><strong>78 %</strong><p class="positive">+11 points</p></div></article>
+          <article class="kpi"><div class="kpi-icon red">◆</div><div><span>Risques élevés</span><strong>4</strong><p>sur 12 risques suivis</p></div></article>
+        </div>
+        <div class="dashboard-grid">
+          <article class="panel chart-panel">
+            <div class="panel-head"><div><h3>Avancement du plan de contrôle</h3><p>Contrôles réalisés par domaine</p></div><span class="pill neutral">87,5 % global</span></div>
+            <div class="bar-chart" id="barChart"></div>
+          </article>
+          <article class="panel risk-summary">
+            <div class="panel-head"><div><h3>Exposition aux risques</h3><p>Répartition des 12 risques suivis</p></div></div>
+            <div class="donut-wrap"><div class="donut"><div><strong>12</strong><span>risques</span></div></div><ul class="legend"><li><i class="dot critical"></i><span>Critique</span><strong>1</strong></li><li><i class="dot high"></i><span>Élevé</span><strong>3</strong></li><li><i class="dot medium"></i><span>Modéré</span><strong>5</strong></li><li><i class="dot low"></i><span>Faible</span><strong>3</strong></li></ul></div>
+          </article>
+          <article class="panel span-2">
+            <div class="panel-head"><div><h3>Alertes à traiter</h3><p>Échéances et écarts nécessitant une attention immédiate</p></div><button class="text-button" data-go="actions">Ouvrir le suivi</button></div>
+            <div class="alert-list" id="dashboardAlerts"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="view" id="risks">
+        <div class="section-intro"><div><h2>Cartographie des risques</h2><p>Priorisation selon la criticité brute et le niveau de maîtrise.</p></div><div class="inline-actions"><select id="riskFilter" aria-label="Filtrer par niveau"><option value="all">Tous les niveaux</option><option value="Critique">Critique</option><option value="Élevé">Élevé</option><option value="Modéré">Modéré</option><option value="Faible">Faible</option></select><button class="button secondary export" data-export="risks">Exporter CSV</button></div></div>
+        <div class="risk-layout">
+          <article class="panel matrix-panel"><div class="panel-head"><div><h3>Matrice de criticité</h3><p>Probabilité × impact</p></div></div><div class="matrix" id="riskMatrix"></div></article>
+          <article class="panel risk-list-panel"><div class="panel-head"><div><h3>Registre des risques</h3><p id="riskCount"></p></div></div><div class="cards-list" id="riskList"></div></article>
+        </div>
+      </section>
+
+      <section class="view" id="controls">
+        <div class="section-intro"><div><h2>Registre des contrôles et écarts</h2><p>Traçabilité du plan de contrôle interne métier.</p></div><button class="button secondary export" data-export="controls">Exporter CSV</button></div>
+        <div class="toolbar"><label class="search"><span>⌕</span><input id="controlSearch" type="search" placeholder="Rechercher un contrôle, un pilote…"></label><select id="controlStatus" aria-label="Filtrer par résultat"><option value="all">Tous les résultats</option><option value="Conforme">Conforme</option><option value="Écart mineur">Écart mineur</option><option value="Écart majeur">Écart majeur</option><option value="À réaliser">À réaliser</option></select></div>
+        <article class="panel table-panel"><div class="table-scroll"><table><thead><tr><th>Référence</th><th>Contrôle</th><th>Domaine</th><th>Pilote</th><th>Échéance</th><th>Résultat</th></tr></thead><tbody id="controlRows"></tbody></table></div><div class="empty" id="controlEmpty">Aucun contrôle ne correspond à ces critères.</div></article>
+      </section>
+
+      <section class="view" id="actions">
+        <div class="section-intro"><div><h2>Anomalies SIRH & actions correctrices</h2><p>Suivi opérationnel des anomalies, responsables et échéances.</p></div><button class="button primary" id="priorityToggle">Afficher uniquement les priorités</button></div>
+        <div class="status-summary" id="actionSummary"></div>
+        <div class="kanban" id="actionBoard"></div>
+      </section>
+
+      <section class="view" id="process">
+        <div class="section-intro"><div><h2>Processus de traitement d’un écart</h2><p>Chaîne commune de détection, qualification, correction et clôture.</p></div><span class="pill neutral">Référentiel v1.2</span></div>
+        <article class="panel process-panel">
+          <div class="process-flow">
+            <button class="process-step active" data-step="0"><span>1</span><strong>Détecter</strong><small>Contrôle ou alerte SIRH</small></button><i>›</i>
+            <button class="process-step" data-step="1"><span>2</span><strong>Qualifier</strong><small>Cause et criticité</small></button><i>›</i>
+            <button class="process-step" data-step="2"><span>3</span><strong>Décider</strong><small>Action et responsable</small></button><i>›</i>
+            <button class="process-step" data-step="3"><span>4</span><strong>Corriger</strong><small>Preuve et échéance</small></button><i>›</i>
+            <button class="process-step" data-step="4"><span>5</span><strong>Vérifier</strong><small>Contrôle d’efficacité</small></button>
+          </div>
+          <div class="process-detail" id="processDetail"></div>
+        </article>
+        <div class="process-cards"><article class="panel"><span class="panel-number">01</span><h3>Rôles définis</h3><p>Le contrôleur documente l’écart, le pilote métier traite l’action et le chef de cellule valide la clôture.</p></article><article class="panel"><span class="panel-number">02</span><h3>Preuves conservées</h3><p>Chaque étape associe une date, un commentaire et une pièce justificative dans le registre de suivi.</p></article><article class="panel"><span class="panel-number">03</span><h3>Escalade maîtrisée</h3><p>Une action majeure en retard est portée en revue mensuelle et fait l’objet d’un contrôle de second niveau.</p></article></div>
+      </section>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
